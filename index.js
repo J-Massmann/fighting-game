@@ -10,9 +10,22 @@ class Sprite {
   constructor(position) {
     this.position = position;
   }
+  draw() {
+    c.fillStyle = 'red';
+    c.fillRect(this.position.x, this.position.y, 50, 150);
+  }
 }
 
 const Player = new Sprite({
   x: 0,
   y: 0,
 });
+
+Player.draw();
+
+const Enemy = new Sprite({
+  x: 400,
+  y: 100,
+});
+
+Enemy.draw();

@@ -6,12 +6,13 @@ canvas.height = 576;
 
 c.fillRect(0, 0, canvas.width, canvas.height);
 
-const gravity = 0.2;
+const gravity = 0.7;
 class Sprite {
   constructor({ position, velocity }) {
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
+    this.lastKey;
   }
   draw() {
     c.fillStyle = 'red';
@@ -63,9 +64,13 @@ const keys = {
   w: {
     pressed: false,
   },
+  ArrowRight: {
+    pressed: false,
+  },
+  ArrowLeft: {
+    pressed: false,
+  },
 };
-
-let lastKey;
 
 function animate() {
   window.requestAnimationFrame(animate);
@@ -75,28 +80,44 @@ function animate() {
   enemy.update();
 
   player.velocity.x = 0;
-  if (keys.a.pressed && lastKey === 'a') {
-    player.velocity.x = -1;
-  } else if (keys.d.pressed && lastKey === 'd') {
-    player.velocity.x = 1;
+  enemy.velocity.x = 0;
+  if (keys.a.pressed && player.lastKey === 'a') {
+    player.velocity.x = -5;
+  } else if (keys.d.pressed && player.lastKey === 'd') {
+    player.velocity.x = 5;
+  }
+  enemy.velocity.x = 0;
+  if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+    enemy.velocity.x = -5;
+  } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+    enemy.velocity.x = 5;
   }
 }
 animate();
-console.log(player, enemy);
 
 window.addEventListener('keydown', event => {
   switch (event.key) {
     case 'd':
       keys.d.pressed = true;
-      lastKey = 'd';
+      player.lastKey = 'd';
       break;
     case 'a':
-      player.velocity.x = -1;
       keys.a.pressed = true;
-      lastKey = 'a';
+      player.lastKey = 'a';
       break;
     case 'w':
-      player.velocity.y = -10;
+      player.velocity.y = -20;
+      break;
+    case 'ArrowRight':
+      keys.ArrowRight.pressed = true;
+      enemy.lastKey = 'ArrowRight';
+      break;
+    case 'ArrowLeft':
+      keys.ArrowLeft.pressed = true;
+      enemy.lastKey = 'ArrowLeft';
+      break;
+    case 'ArrowUp':
+      enemy.velocity.y = -20;
       break;
   }
   console.log(event.key);
@@ -112,6 +133,16 @@ window.addEventListener('keyup', event => {
       break;
     case 'w':
       keys.w.pressed = false;
+      lastKey = 'w';
+      break;
+    case 'ArrowRight':
+      keys.ArrowRight.pressed = false;
+      break;
+    case 'ArrowLeft':
+      keys.ArrowLeft.pressed = false;
+      break;
+    case 'ArrowUp':
+      keys.ArrowUp.pressed = false;
       lastKey = 'w';
       break;
   }
